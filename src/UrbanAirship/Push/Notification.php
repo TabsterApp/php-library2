@@ -41,12 +41,20 @@ function notification($alert, $overrides=array())
  * for Newsstand iOS applications.
  * @param $extra array: A set of key/value pairs to include in the push payload
  * sent to the device.
+ * @param $expiry int: Expiry time for apns to cease trying to deliver push
+ * @param $priority int: APNS priority of delivery, must be 5 for background push (ios 7+ specific)
  * @return array
  * @throws \InvalidArgumentException for invalid values.
  */
-function ios($alert=null, $badge=null, $sound=null, $contentAvailable=false,
-        $extra=null)
-{
+function ios(
+    $alert = null,
+    $badge = null,
+    $sound = null,
+    $contentAvailable = false,
+    $extra = null,
+    $priority = 10,
+    $expiry = null
+) {
     $payload = array();
     if (!is_null($alert)) {
         $payload["alert"] = $alert;
@@ -69,6 +77,12 @@ function ios($alert=null, $badge=null, $sound=null, $contentAvailable=false,
     }
     if (!is_null($extra)) {
         $payload["extra"] = $extra;
+    }
+    if(is_int($expiry)){
+        $payload["expiry"] = $expiry;
+    }
+    if($priority){
+        $payload["priority"] = $priority;
     }
 
     return $payload;
