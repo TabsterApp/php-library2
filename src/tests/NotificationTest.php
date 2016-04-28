@@ -31,7 +31,8 @@ class TestNotification extends PHPUnit_Framework_TestCase
                 "alert" => "Hello",
                 "badge" => 100,
                 "extra" => array(
-                    "foo" => "bar")));
+                    "foo" => "bar"),
+                "priority" => 10));
 
         $this->assertEquals(
             P\ios(null, "+1", null, true,
@@ -39,12 +40,13 @@ class TestNotification extends PHPUnit_Framework_TestCase
             array(
                 "badge" => "+1",
                 "content_available" => true,
+                "priority" => 10,
                 "extra" => array(
                     "foo" =>
                         array("bar" => "baz"))));
         $this->assertEquals(
             P\ios(null, "auto"),
-            array("badge" => "auto"));
+            array("badge" => "auto", "priority" => 10));
     }
 
     /**
