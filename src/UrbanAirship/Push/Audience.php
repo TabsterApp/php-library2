@@ -37,6 +37,15 @@ function deviceToken($token)
 }
 
 /**
+ * @param string $namedUserId
+ * @return array
+ */
+function namedUser($namedUserId)
+{
+    return ['named_user' => $namedUserId];
+}
+
+/**
     * Select a single Blackberry Pin
     * @param $pin
     * @return array
