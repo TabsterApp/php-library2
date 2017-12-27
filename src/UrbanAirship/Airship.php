@@ -14,6 +14,7 @@ use UrbanAirship\Devices\DeviceListing\ChannelList;
 use UrbanAirship\Devices\DeviceLookup\ChannelLookup;
 use UrbanAirship\Devices\DeviceLookup\DeviceTokenLookup;
 use UrbanAirship\Devices\DeviceLookup\APIDLookup;
+use UrbanAirship\Push\EventRequest;
 use UrbanAirship\Push\PushRequest;
 use UrbanAirship\Push\ScheduledPushRequest;
 
@@ -104,6 +105,15 @@ class Airship
     public function push()
     {
         return new PushRequest($this);
+    }
+
+    /**
+     * Return a EventRequest that can be used to send a push
+     * @return EventRequest
+     */
+    public function event()
+    {
+        return new EventRequest($this);
     }
 
     /**
