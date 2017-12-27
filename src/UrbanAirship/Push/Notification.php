@@ -130,7 +130,6 @@ function ios($alert=null, $badge=null, $sound=null, $contentAvailable=false,
     if ($collapseId) {
         $payload["collapse_id"] = $collapseId;
     }
->>>>>>> 780f6da8a603f6245f67f517cd9cf2d1fa93ccfe
 
     return $payload;
 }

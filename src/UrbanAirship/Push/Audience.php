@@ -158,15 +158,6 @@ function alias($alias)
 }
 
 /**
- * Select a single named user.
- * @param string $namedUser
- */
-function namedUser($namedUser)
-{
-    return array("named_user" => $namedUser);
-}
-
-/**
  * Select a single segment.
  * @param string $segment
  */
