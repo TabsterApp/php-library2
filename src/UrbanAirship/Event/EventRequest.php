@@ -63,6 +63,7 @@ class EventRequest
         $this->airship = $airship;
         $this->user = 'channel';
         $this->value = 0;
+        $this->interactionType = 'web';
     }
 
     /**
