@@ -37,7 +37,7 @@ Audience Selectors
 ------------------
 
 An audience should specify one or more devices. An audience can be a device,
-such as a **device token** or **APID**; a tag, alias, or segment; a location;
+such as a **Channel**; a tag, named user, or segment; a location;
 or a combination. Audience selectors are combined with ``and_``, ``or_``, and
 ``not_``. All selectors are available in the :namespace:`UrbanAirship\\Push` namespace.
 
@@ -53,6 +53,20 @@ Simple Selectors
 
       $push->setAudience(P\all);
 
+:function:`UrbanAirship\\Push\\iosChannel`
+   Select a single iOS channel.
+
+   .. code-block:: php
+
+      $push->setAudience(P\iosChannel("8ac440cb-f148-4856-9631-3c8eb8d88d60"));
+
+:function:`UrbanAirship\\Push\\androidChannel`
+   Select a single Android channel.
+
+   .. code-block:: php
+
+      $push->setAudience(P\androidChannel("b8f9b663-0a3b-cf45-587a-be880946e880"));
+
 :function:`UrbanAirship\\Push\\deviceToken`
    Select a single iOS device token.
 
@@ -60,8 +74,8 @@ Simple Selectors
 
       $push->setAudience(P\deviceToken("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
 
-:function:`UrbanAirship\\Push\\devicePin`
-   Select a single BlackBerry PIN.
+:function:`UrbanAirship\\Push\\amazonChannel`
+   Select a single Amazon channel.
 
 :function:`UrbanAirship\\Push\\apid`
    Select a single Android APID.
@@ -74,6 +88,9 @@ Simple Selectors
 
 :function:`UrbanAirship\\Push\\tag`
    Select a single tag.
+
+:function:`UrbanAirship\\Push\\named_user`
+   Select a single named user.
 
 :function:`UrbanAirship\\Push\\alias`
    Select a single alias.
@@ -120,8 +137,8 @@ Location Selectors
    Produces a time specifier that represents an absolute amount of time,
    such as from 2012-01-01 12:00 to 2012-01-01 12:00
 
-Notifcation Payload
--------------------
+Notification Payload
+--------------------
 
 The notification payload determines what message and data is sent to a device.
 At its simplest, it consists of a single string-valued attribute, "alert",
@@ -170,6 +187,7 @@ You can override the payload with platform-specific values as well.
             null,
             null,
             null,
+            false,
             array("articleid" => "AB1234")
          ))
       ))
@@ -178,17 +196,26 @@ You can override the payload with platform-specific values as well.
    <http://developer.android.com/google/gcm/adv.html>`_ for details on
    ``collapseKey``, ``timeToLive``, and ``delayWhileIdle``.
 
-:function:`UrbanAirship\\Push\\blackberry`
-    BlackBerry specific platform override payload.
+:function:`UrbanAirship\\Push\\amazon`
+    Amazon specific platform override payload.
 
    .. code-block:: php
 
       $push->setNotification(P\notification(
          null,
-         array("blackberry"=>P\blackberry(
-            "Hello BlackBerry"
+         array("amazon"=>P\amazon(
+            "Hello Amazon",
+            null,
+            null,
+            null,
+            null,
+            array("articleid" => "AB1234")
          ))
       ))
+
+   See `Amazon Device Messaging
+   <https://developer.amazon.com/appsandservices/apis/engage/device-messaging/tech-docs/06-sending-a-message>`_ for details on
+   ``consolidation_key`` and ``expires_after``.
 
 :function:`UrbanAirship\\Push\\wnsPayload`
     WNS specific platform override payload.
@@ -204,7 +231,7 @@ wish to target, either with a list of strings:
 
 .. code-block:: php
 
-   $push->setDeviceTypes(P\deviceTypes('ios', 'blackberry'));
+   $push->setDeviceTypes(P\deviceTypes('ios', 'android'));
 
 or with the :constant:`UrbanAirship\\Push\\all` shortcut.
 
@@ -212,10 +239,27 @@ or with the :constant:`UrbanAirship\\Push\\all` shortcut.
 
    $push->setDeviceTypes(P\all);
 
-Rich Push
----------
+In-App Message
+--------------
 
-If you'd like to send a rich push along with your notification (or alone), use
+You can send an in-app message alone or with a push notification by using setInAppMessage. See :function:`UrbanAirship\\Push\\inAppMessage` for more information about parameters.
+
+.. code-block:: php
+
+   $push->setInAppMessage(P\inAppMessage("This is the alert text!",
+                "banner",
+                0,
+                array("position"=>"top"),
+                null,
+                array("type" => "ua_yes_no_foreground", "button_actions" => array(
+                "yes" => array("add_tag" => "tapped_yes"), "no" => array("add_tag" => "tapped_no")))
+            ))
+        );
+
+Message Center
+--------------
+
+If you'd like to send a Message Center message along with your notification (or alone), use
 setMessage. See :function:`UrbanAirship\\Push\\message` for more information
 about parameters.
 
@@ -228,6 +272,6 @@ about parameters.
                 0)
         );
 
-Note: Rich Push is not supported on Windows, Windows Phone, or Blackberry, and
+Note: Message Center is not supported on Windows or Windows Phone and
 requires additional setup for other platforms. See our API and implementation
 docs for more information.

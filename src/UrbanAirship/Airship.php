@@ -1,15 +1,22 @@
 <?php
 /*
-Copyright 2013 Urban Airship and Contributors
+Copyright 2013-2016 Urban Airship and Contributors
 */
 
 namespace UrbanAirship;
 
+use Httpful\Httpful;
 use Httpful\Request;
-use UrbanAirship\Devices\DeviceTokenList;
-use UrbanAirship\Devices\APIDList;
+use UrbanAirship\About;
+use UrbanAirship\Devices\DeviceListing\DeviceTokenList;
+use UrbanAirship\Devices\DeviceListing\APIDList;
+use UrbanAirship\Devices\DeviceListing\ChannelList;
+use UrbanAirship\Devices\DeviceLookup\ChannelLookup;
+use UrbanAirship\Devices\DeviceLookup\DeviceTokenLookup;
+use UrbanAirship\Devices\DeviceLookup\APIDLookup;
 use UrbanAirship\Push\PushRequest;
 use UrbanAirship\Push\ScheduledPushRequest;
+
 
 
 class Airship
@@ -17,6 +24,7 @@ class Airship
 
     const BASE_URL = 'https://go.urbanairship.com';
     const VERSION_STRING = 'application/vnd.urbanairship+json; version=%d;';
+    const USER_AGENT_KEY = 'User-Agent';
 
     public $key;
     public $secret;
@@ -25,6 +33,17 @@ class Airship
     {
         $this->key = $appKey;
         $this->secret = $masterSecret;
+    }
+
+    /**
+     * Return a list of channels for the app. The ChannelList implements
+     * an Iterator.
+     * @param int $limit Limit on channels returned
+     * @return ChannelList
+     */
+    public function listChannels($limit=null)
+    {
+        return new ChannelList($this, $limit);
     }
 
     /**
@@ -46,6 +65,36 @@ class Airship
     public function listAPIDs($limit=null)
     {
         return new APIDList($this, $limit);
+    }
+
+     /**
+     * Get information on an individual channel
+     * @param string $deviceid Device ID to look up
+     * @return ChannelLookup
+     */
+    public function channelLookup($deviceId)
+    {
+        return new ChannelLookup($this, $deviceId);
+    }
+
+  /**
+     * Get information on an individual device token
+     * @param string $deviceid Device ID to look up
+     * @return DeviceTokenLookup
+     */
+    public function deviceTokenLookup($deviceId)
+    {
+        return new DeviceTokenLookup($this, $deviceId);
+    }
+
+    /**
+     * Get information on an individual APID
+     * @param string $deviceid Device ID to look up
+     * @return APIDLookup
+     */
+    public function apidLookup($deviceId)
+    {
+        return new APIDLookup($this, $deviceId);
     }
 
     /**
@@ -123,8 +172,12 @@ class Airship
             ->method($method)
             ->uri($uri)
             ->authenticateWith($this->key, $this->secret)
-            ->body($body)
-            ->addHeaders($headers);
+            ->body($body);
+
+        $userAgent = sprintf("%s/%s", "UAPHPLibrary", About::LIBRARY_VERSION);
+        $headers[self::USER_AGENT_KEY] = $userAgent;
+        $request->addHeaders($headers);
+
         $response = $request->send();
 
         $logger->debug("Received response", array(

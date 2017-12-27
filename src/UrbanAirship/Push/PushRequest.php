@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2013 Urban Airship and Contributors
+Copyright 2013-2016 Urban Airship and Contributors
 */
 
 namespace UrbanAirship\Push;
@@ -16,6 +16,7 @@ class PushRequest
     private $options = null;
     private $deviceTypes;
     private $message;
+    private $inAppMessage;
 
     function __construct($airship)
     {
@@ -46,6 +47,12 @@ class PushRequest
         return $this;
     }
 
+    function setInAppMessage($inAppMessage)
+    {
+        $this->inAppMessage = $inAppMessage;
+        return $this;
+    } 
+
     function setOptions($options)
     {
         $this->options = $options;
@@ -62,6 +69,9 @@ class PushRequest
         if (!is_null($this->message)) {
             $payload['message'] = $this->message;
         }
+        if (!is_null($this->inAppMessage)) {
+            $payload['in_app'] = $this->inAppMessage;
+        }
         if (!is_null($this->options)) {
             $payload['options'] = $this->options;
         }
@@ -74,7 +84,7 @@ class PushRequest
         $logger = UALog::getLogger();
 
         $response = $this->airship->request("POST",
-            json_encode($this->getPayload()), $uri, "application/json", 3);
+            json_encode($this->getPayload()), $uri, "application/vnd.urbanairship+json", 3);
 
         $payload = json_decode($response->raw_body, true);
         $logger->info("Push sent successfully.", array("push_ids" => $payload['push_ids']));
