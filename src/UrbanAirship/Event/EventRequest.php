@@ -55,6 +55,14 @@ class EventRequest
     }
 
     /**
+     * @param array $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
+    }
+
+    /**
      * EventRequest constructor.
      * @param $airship
      */
