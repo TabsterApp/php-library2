@@ -18,7 +18,41 @@ class EventRequest
     private $airship;
     private $occurred;
     private $user;
-    private $body = [];
+    private $name;
+    private $interactionType;
+    private $sessionId;
+    private $properties = [];
+
+    /**
+     * @param mixed $interactionType
+     */
+    public function setInteractionType($interactionType)
+    {
+        $this->interactionType = $interactionType;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $sessionId
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
 
     /**
      * EventRequest constructor.
@@ -28,6 +62,7 @@ class EventRequest
     {
         $this->airship = $airship;
         $this->user = 'channel';
+        $this->value = 0;
     }
 
     /**
@@ -42,12 +77,12 @@ class EventRequest
     }
 
     /**
-     * @param $body
+     * @param $name
      * @return $this
      */
-    public function setBody($body)
+    public function setName($name)
     {
-        $this->body = $body;
+        $this->name = $name;
 
         return $this;
     }
@@ -59,12 +94,15 @@ class EventRequest
     {
         $payload = array(
             'occured' => $this->occurred,
-            'user' => $this->user
+            'user' => $this->user,
+            'body' => [
+                'name' => $this->name,
+                'value' => $this->value,
+                'interaction_type' => $this->interactionType,
+                'session_id' => $this->sessionId,
+                'properties' => $this->properties
+            ]
         );
-
-        if (!is_null($this->body)) {
-            $payload['body'] = $this->body;
-        }
 
         return $payload;
     }
