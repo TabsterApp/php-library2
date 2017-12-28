@@ -3,7 +3,7 @@
 Copyright 2013-2016 Urban Airship and Contributors
 */
 
-namespace UrbanAirship\Push;
+namespace UrbanAirship\Event;
 
 use UrbanAirship\UALog;
 
