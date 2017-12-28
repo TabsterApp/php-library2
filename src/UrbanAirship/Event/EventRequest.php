@@ -15,7 +15,7 @@ use UrbanAirship\UALog;
 class EventRequest implements RequestInterface
 {
 
-    const PUSH_URL = "/api/custom-events";
+    const EVENTS_URL = "/api/custom-events";
     private $airship;
     private $occurred;
     private $value;
@@ -94,6 +94,8 @@ class EventRequest implements RequestInterface
     public function setChannel($channel)
     {
         $this->channel = $channel;
+
+        return $this;
     }
 
 
@@ -115,7 +117,7 @@ class EventRequest implements RequestInterface
     function getPayload()
     {
         $payload = array(
-            'occured' => $this->occurred,
+            'occurred' => $this->occurred,
             'user' => [
                 'channel' => $this->channel
             ],
@@ -136,7 +138,7 @@ class EventRequest implements RequestInterface
      */
     function send()
     {
-        $uri = $this->airship->buildUrl(self::PUSH_URL);
+        $uri = $this->airship->buildUrl(self::EVENTS_URL);
         $logger = UALog::getLogger();
 
         $response = $this->airship->request("POST",
