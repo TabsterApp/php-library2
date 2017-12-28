@@ -142,7 +142,7 @@ class EventRequest implements RequestInterface
         $logger = UALog::getLogger();
 
         $response = $this->airship->request("POST",
-            json_encode($this->getPayload()), $uri, "application/vnd.urbanairship+json", 3 , null, true);
+            json_encode($this->getPayload()), $uri, "application/json", 3 , null, true);
 
         $logger->info("Event sent successfully.");
         return new EventResponse($response);
