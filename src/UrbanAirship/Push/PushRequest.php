@@ -5,9 +5,10 @@ Copyright 2013-2016 Urban Airship and Contributors
 
 namespace UrbanAirship\Push;
 
+use UrbanAirship\RequestInterface;
 use UrbanAirship\UALog;
 
-class PushRequest implements \RequestInterface
+class PushRequest implements RequestInterface
 {
     const PUSH_URL = "/api/push/";
     private $airship;

@@ -5,13 +5,14 @@ Copyright 2013-2016 Urban Airship and Contributors
 
 namespace UrbanAirship\Event;
 
+use UrbanAirship\RequestInterface;
 use UrbanAirship\UALog;
 
 /**
  * Class EventRequest
  * @package UrbanAirship\Push
  */
-class EventRequest implements \RequestInterface
+class EventRequest implements RequestInterface
 {
 
     const PUSH_URL = "/api/custom-events";
