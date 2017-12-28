@@ -17,6 +17,7 @@ class EventRequest implements \RequestInterface
     const PUSH_URL = "/api/custom-events";
     private $airship;
     private $occurred;
+    private $value;
     private $user;
     private $name;
     private $interactionType;
@@ -73,7 +74,7 @@ class EventRequest implements \RequestInterface
         $this->airship = $airship;
         $this->user = 'channel';
         $this->value = 0;
-        $this->interactionType = 'web';
+        $this->interactionType = 'url';
     }
 
     /**
