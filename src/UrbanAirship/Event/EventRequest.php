@@ -19,7 +19,7 @@ class EventRequest implements RequestInterface
     private $airship;
     private $occurred;
     private $value;
-    private $user;
+    private $channel;
     private $name;
     private $interactionType;
     private $sessionId;
@@ -73,7 +73,6 @@ class EventRequest implements RequestInterface
     function __construct($airship)
     {
         $this->airship = $airship;
-        $this->user = 'channel';
         $this->value = 0;
         $this->interactionType = 'url';
     }
@@ -88,6 +87,16 @@ class EventRequest implements RequestInterface
 
         return $this;
     }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
+    }
+
+
 
     /**
      * @param $name
@@ -107,7 +116,9 @@ class EventRequest implements RequestInterface
     {
         $payload = array(
             'occured' => $this->occurred,
-            'user' => $this->user,
+            'user' => [
+                'channel' => $this->channel
+            ],
             'body' => [
                 'name' => $this->name,
                 'value' => $this->value,
