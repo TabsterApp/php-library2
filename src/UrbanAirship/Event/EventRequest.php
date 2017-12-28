@@ -11,7 +11,7 @@ use UrbanAirship\UALog;
  * Class EventRequest
  * @package UrbanAirship\Push
  */
-class EventRequest
+class EventRequest implements \RequestInterface
 {
 
     const PUSH_URL = "/api/custom-events";
@@ -60,6 +60,8 @@ class EventRequest
     public function setProperties($properties)
     {
         $this->properties = $properties;
+
+        return $this;
     }
 
     /**

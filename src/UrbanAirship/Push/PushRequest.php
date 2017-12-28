@@ -7,7 +7,7 @@ namespace UrbanAirship\Push;
 
 use UrbanAirship\UALog;
 
-class PushRequest
+class PushRequest implements \RequestInterface
 {
     const PUSH_URL = "/api/push/";
     private $airship;

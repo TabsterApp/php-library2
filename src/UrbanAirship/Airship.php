@@ -14,7 +14,7 @@ use UrbanAirship\Devices\DeviceListing\ChannelList;
 use UrbanAirship\Devices\DeviceLookup\ChannelLookup;
 use UrbanAirship\Devices\DeviceLookup\DeviceTokenLookup;
 use UrbanAirship\Devices\DeviceLookup\APIDLookup;
-use UrbanAirship\Push\EventRequest;
+use UrbanAirship\Event\EventRequest;
 use UrbanAirship\Push\PushRequest;
 use UrbanAirship\Push\ScheduledPushRequest;
 
