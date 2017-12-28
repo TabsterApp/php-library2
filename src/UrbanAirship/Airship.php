@@ -17,7 +17,7 @@ use UrbanAirship\Devices\DeviceLookup\APIDLookup;
 use UrbanAirship\Event\EventRequest;
 use UrbanAirship\Push\PushRequest;
 use UrbanAirship\Push\ScheduledPushRequest;
-
+use UrbanAirship\User\NamedUserLookup\NamedUserLookup;
 
 
 class Airship
@@ -78,6 +78,16 @@ class Airship
     public function channelLookup($deviceId)
     {
         return new ChannelLookup($this, $deviceId);
+    }
+
+    /**
+     * Get channels from named user id
+     * @param string $userId UserID ID to look up
+     * @return NamedUserLookup
+     */
+    public function namedUserLookup($userId)
+    {
+        return new NamedUserLookup($this, $userId);
     }
 
   /**
