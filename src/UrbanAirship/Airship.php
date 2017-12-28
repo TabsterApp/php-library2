@@ -29,11 +29,13 @@ class Airship
 
     public $key;
     public $secret;
+    public $bearer;
 
-    public function __construct($appKey, $masterSecret)
+    public function __construct($appKey, $masterSecret, $bearer)
     {
         $this->key = $appKey;
         $this->secret = $masterSecret;
+        $this->bearer = $bearer;
     }
 
     /**
@@ -160,9 +162,22 @@ class Airship
      * @return \Httpful\associative|string
      * @throws AirshipException
      */
-    public function request($method, $body, $uri, $contentType=null, $version=3, $request=null)
-    {
+    public function request(
+        $method,
+        $body,
+        $uri,
+        $contentType = null,
+        $version = 3,
+        $request = null,
+        $withBearer = false
+    ) {
         $headers = array("Accept" => sprintf(self::VERSION_STRING, $version));
+
+        if($withBearer) {
+            $headers["Authorization"] = 'Bearer '. $this->bearer;
+            $headers["X-UA-Appkey"] = $this->key;
+        }
+
         if (!is_null($contentType)) {
             $headers["Content-type"] = $contentType;
         }
@@ -172,17 +187,22 @@ class Airship
             "method" => $method,
             "uri" => $uri,
             "headers" => $headers,
-            "body" => $body));
+            "body" => $body
+        ));
 
         if (is_null($request)) {
             // Tests pass in a pre-built Request. Normal code builds one here.
             $request = Request::init();
         }
+
         $request
             ->method($method)
             ->uri($uri)
-            ->authenticateWith($this->key, $this->secret)
             ->body($body);
+
+        if (!$withBearer) {
+            $request->authenticateWith($this->key, $this->secret);
+        }
 
         $userAgent = sprintf("%s/%s", "UAPHPLibrary", About::LIBRARY_VERSION);
         $headers[self::USER_AGENT_KEY] = $userAgent;
@@ -193,7 +213,8 @@ class Airship
         $logger->debug("Received response", array(
             "status" => $response->code,
             "headers" => $response->raw_headers,
-            "body" => $response->raw_body));
+            "body" => $response->raw_body
+        ));
 
         if ($response->code >= 300) {
             throw AirshipException::fromResponse($response);
