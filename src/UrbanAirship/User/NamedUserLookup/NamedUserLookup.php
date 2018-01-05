@@ -9,7 +9,7 @@ namespace UrbanAirship\User\NamedUserLookup;
 class NamedUserLookup
 {
 
-    const LOOKUP_URL = "api/named_users/?id=";
+    const LOOKUP_URL = "/api/named_users/?id=";
 
     /**
      * @var object Device info for device id
